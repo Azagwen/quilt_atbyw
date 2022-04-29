@@ -1,0 +1,114 @@
+package net.azagwen.atbyw.block.registry;
+
+import net.azagwen.atbyw.block.*;
+import net.azagwen.atbyw.containers.MiningLevelContainer;
+import net.azagwen.atbyw.containers.RequiredToolContainer;
+import net.azagwen.atbyw.AtbywMain;
+import net.azagwen.atbyw.testing.TestingBlockRegistry;
+import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
+import net.minecraft.block.*;
+import net.minecraft.entity.EntityType;
+import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockView;
+
+import java.util.function.ToIntFunction;
+
+import static net.azagwen.atbyw.block.registry.Utils.BLOCK_NUMBER;
+import static net.azagwen.atbyw.block.registry.Utils.registerBlock;
+import static net.azagwen.atbyw.AtbywMain.*;
+
+public class BlockRegistry {
+    public static final RequiredToolContainer AXE_MINEABLE = new RequiredToolContainer("axe_mineable");
+    public static final RequiredToolContainer HOE_MINEABLE = new RequiredToolContainer("hoe_mineable");
+    public static final RequiredToolContainer PICKAXE_MINEABLE = new RequiredToolContainer("pickaxe_mineable");
+    public static final RequiredToolContainer SHOVEL_MINEABLE = new RequiredToolContainer("shovel_mineable");
+    public static final MiningLevelContainer NEEDS_STONE_TOOL = new MiningLevelContainer("needs_stone_tool");
+    public static final MiningLevelContainer NEEDS_IRON_TOOL = new MiningLevelContainer("needs_iron_tool");
+    public static final MiningLevelContainer NEEDS_DIAMOND_TOOL = new MiningLevelContainer("needs_diamond_tool");
+
+    public static final Block DEVELOPER_BLOCK = new DevBlock(QuiltBlockSettings.of(Material.WOOL, MapColor.ORANGE).nonOpaque().strength(0.1F).sounds(BlockSoundGroup.BONE));
+    public static final Block SHROOMSTICK = new ShroomStickBlock(QuiltBlockSettings.of(AtbywMaterials.SHROOMSTICK).breakInstantly().noCollision().nonOpaque().luminance((state) -> 15));
+    public static final Block CTM_DEBUG_BLOCK = new Block(QuiltBlockSettings.copyOf(Blocks.STONE));
+
+    public static final Block PUZZLED_POLISHED_GRANITE = new Block(QuiltBlockSettings.of(Material.STONE));         //TODO FINISH OR CANCEL
+    public static final Block PUZZLED_POLISHED_DIORITE = new Block(QuiltBlockSettings.of(Material.STONE));         //TODO FINISH OR CANCEL
+    public static final Block PUZZLED_POLISHED_ANDESITE = new Block(QuiltBlockSettings.of(Material.STONE));        //TODO FINISH OR CANCEL
+    public static final Block PUZZLED_POLISHED_BLACKSTONE = new Block(QuiltBlockSettings.of(Material.STONE));      //TODO FINISH OR CANCEL
+    public static final Block PUZZLED_POLISHED_DEEPSLATE = new Block(QuiltBlockSettings.of(Material.STONE));       //TODO FINISH OR CANCEL
+
+    public static final Block COBBLED_GRANITE = new Block(QuiltBlockSettings.of(Material.STONE));                  //TODO FINISH OR CANCEL
+    public static final Block COBBLED_DIORITE = new Block(QuiltBlockSettings.of(Material.STONE));                  //TODO FINISH OR CANCEL
+    public static final Block COBBLED_ANDESITE = new Block(QuiltBlockSettings.of(Material.STONE));                 //TODO FINISH OR CANCEL
+
+    public static final Block SMOOTH_DEEPSLATE = new Block(QuiltBlockSettings.of(Material.STONE));                 //TODO FINISH OR CANCEL
+    public static final Block SMOOTH_GRANITE = new Block(QuiltBlockSettings.of(Material.STONE));                   //TODO FINISH OR CANCEL
+    public static final Block SMOOTH_DIORITE = new Block(QuiltBlockSettings.of(Material.STONE));                   //TODO FINISH OR CANCEL
+    public static final Block SMOOTH_ANDESITE = new Block(QuiltBlockSettings.of(Material.STONE));                  //TODO FINISH OR CANCEL
+
+    public static final Block CRIMSON_NYLIUM_MOSS_BLOCK = new Block(QuiltBlockSettings.of(Material.MOSS_BLOCK));   //TODO FINISH OR CANCEL
+    public static final Block WARPED_NYLIUM_MOSS_BLOCK = new Block(QuiltBlockSettings.of(Material.MOSS_BLOCK));    //TODO FINISH OR CANCEL
+    public static final Block CRIMSON_NYLIUM_MOSS_CARPET = new Block(QuiltBlockSettings.of(Material.MOSS_BLOCK));  //TODO FINISH OR CANCEL
+    public static final Block WARPED_NYLIUM_MOSS_CARPET = new Block(QuiltBlockSettings.of(Material.MOSS_BLOCK));   //TODO FINISH OR CANCEL
+
+
+    public static Boolean always(BlockState state, BlockView world, BlockPos pos, EntityType<?> type) { return true; }
+    public static Boolean never(BlockState state, BlockView world, BlockPos pos, EntityType<?> type) { return false; }
+    public static boolean always(BlockState state, BlockView world, BlockPos pos) { return true; }
+    public static boolean never(BlockState state, BlockView world, BlockPos pos) { return false; }
+
+    static ToIntFunction<BlockState> lightLevelFromState(int litLevel, BooleanProperty isLit) {
+        return (blockState) -> blockState.get(isLit) ? litLevel : 0;
+    }
+
+    static ToIntFunction<BlockState> lightLevelFromState(int divider, IntProperty litLevel, BooleanProperty isLit) {
+        return (blockState) -> blockState.get(isLit) ? ((int) Math.ceil((double) blockState.get(litLevel) / (double) divider)) : 0;
+    }
+
+    public static void register() {
+        Utils.setIdentifierFunc(AtbywMain::id);
+        BuildingBlockRegistry.register();    //ATBYW BUILDING BLOCKS
+        DecorationBlockRegistry.register();  //ATBYW DECORATION
+        RedstoneBlockRegistry.register();    //ATBYW REDSTONE
+        TestingBlockRegistry.register();     //TEST BLOCKS
+
+        //ATBYW MISC
+        registerBlock(MISC_TAB, "dev_block", DEVELOPER_BLOCK);
+        registerBlock(MISC_TAB, "ctm_debug_block", CTM_DEBUG_BLOCK);
+
+        //Item-less blocks
+        registerBlock("shroomstick", SHROOMSTICK);
+
+        LOGGER.info("ATBYW Blocks Initialized ({} Blocks registered)", BLOCK_NUMBER);
+    }
+}
+
+//TODO: Idea: locks to lock chests & doors
+//TODO: Experiment with connected models/textures further (Update: going well)
+//TODO: Experiment with World Gen
+//TODO: Port Atbyw Mod Interaction recipes to datagen (Update: no need, Mod interactions cancelled)
+
+//Ideas
+//? DONE: Add Iron ladder that can be deployed downwards using redstone (Update: Done, might needs proof-testing)
+//? DONE: Add Amethyst bricks
+//? WIP: Add Amethyst Walls/Fences
+
+//TODO: STATUES Add Bipedal Statues
+//TODO: STATUES Add signing fish function.
+//TODO: STATUES Make slime statues combine-able.
+//TODO: Add thin ice (world gen when ready)
+//TODO: Add Railing Blocks (catwalk handles) || update: WIP
+//TODO: Add regular ice bricks that melt
+//TODO: Idea > "dried" coral blocks that keep their colors
+//TODO: Add chairs ?
+//TODO: Add step detectors.
+//TODO: Add a chain hook that you can hook items and blocks to.
+//TODO: Add carpets that connect together in patterns
+//TODO: Add more blocks exploiting connected textures
+//TODO: Add smooth variants of Deepslathe, Granite, Diorite, Andesite, Tuff...
+//TODO: Add Cactus Planks & assorted stuff (Update: WIP)
+//TODO: Add Stone melter furnace
+//TODO: Add string curtains for doorways
+//TODO: Energized Dropper/Dispenser > Instantly dispenses what it holds out of "anger"

@@ -1,0 +1,14 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "net.azagwen.atbyw.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+        "block_behavior.BlockMixin"
+    ],
+    "client": [
+    ],
+    "injectors": {
+        "defaultRequire": 1
+  }
+}

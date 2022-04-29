@@ -25,3 +25,4 @@ bin/
 
 # macOS
 *.DS_Store
+/src/main/java/net/azagwen/atbyw/testing/

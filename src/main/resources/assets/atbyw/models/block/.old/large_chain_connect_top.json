@@ -1,0 +1,19 @@
+{
+    "parent": "block/block",
+    "textures": {
+        "particle": "atbyw:block/large_chain",
+        "chain": "atbyw:block/large_chain"
+    },
+    "elements": [
+        {
+            "from": [8, 8, 3],
+            "to": [8, 16, 13],
+            "rotation": {"angle": 45, "axis": "y", "origin": [8, 0, 8]},
+            "shade": false,
+            "faces": {
+                "east": {"uv": [3, 8, 13, 16], "texture": "#chain"},
+                "west": {"uv": [3, 8, 13, 16], "texture": "#chain"}
+            }
+        }
+    ]
+}
